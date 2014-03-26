@@ -1,0 +1,6 @@
+---
+- hosts: all
+  user: root
+  tasks:
+   - name: Ensure kernel-devel is installed.
+     yum: name=kernel-devel state=latest

@@ -1,0 +1,8 @@
+---
+- name: install and start apache
+  hosts: test-clients
+  user: root
+  tasks:
+    - name: install and start Apache2
+      yum: name=httpd state=latest
+    - service: name=httpd state=running enabled=yes
