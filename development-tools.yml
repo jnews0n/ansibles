@@ -1,6 +1,7 @@
 ---
 - hosts: all
   user: root
+
   tasks:
    - name: Ensure Developer Tools
      yum: name="@Development tools" state=present
