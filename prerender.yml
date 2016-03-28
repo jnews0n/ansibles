@@ -1,0 +1,26 @@
+---
+- hosts: tiles
+  user: ansible
+  sudo: True
+  vars:
+    prerender_home: "/usr/local/prerender"
+  tasks:
+    - name: Install GIT
+      yum: name=git state=installed
+    - name: Install NodeJS
+      yum: enablerepo=epel name=nodejs state=installed
+    - name: Install NPM
+      yum: enablerepo=epel name=npm state=installed
+    - name: Clone prerender Git repo
+      git: repo=https://github.com/prerender/prerender.git dest={{prerender_home}}
+    - name: Build prerender
+      npm: path={{prerender_home}}
+    - name: Install Forever to run prerender as Daemon
+      npm: name=forever global=yes state=latest
+    - name: "Check list of Node.js apps running."
+      command: forever list
+      register: forever_list
+      changed_when: false
+    - name: "Start prerender Node.js app."
+      command: forever start {{prerender_home}}/server.js 
+      when: "forever_list.stdout.find('{{prerender_home}}/server.js') == -1"

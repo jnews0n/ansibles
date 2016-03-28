@@ -1,0 +1,15 @@
+---
+- hosts: CentOS
+  user: ansible
+  sudo: true
+  tasks:
+   - name: Install gcc to build vmware-tools
+     yum: name=gcc state=latest
+   - name: Install make to build vmware-tools
+     yum: name=make state=latest
+   - name: Install kernel-headers to build vmware-tools
+     yum: name=kernel-headers state=latest
+   - name: Install kernel-devel to build vmware-tools
+     yum: name=kernel-devel state=latest
+   - name: Install binutils to build vmware-tools
+     yum: name=binutils state=latest

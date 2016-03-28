@@ -1,0 +1,29 @@
+---
+- hosts: debian
+  user: ansible
+  sudo: true
+  tasks:
+
+   - name: Add the PostgreSQL APT repository key
+     tags:
+       - postgresql
+       - postgresql-repository
+     apt_key: id=ACCC4CF8 url=http://apt.postgresql.org/pub/repos/apt/ACCC4CF8.asc state=present
+
+   - name: Add the Debian PostgreSQL APT repository
+     tags:
+       - postgresql
+       - postgresql-repository
+     apt_repository: repo="deb http://apt.postgresql.org/pub/repos/apt/ wheezy-pgdg main" state=present
+     when: ansible_lsb.id == 'Wheezy'
+
+   - name: Ensure Latest system updates are installed.
+     apt: update_cache=yes
+
+   - name: We need xz-utils to unpack the python tarball.
+     apt: pkg=xz-utils state=present
+
+   - name: Install postgresql
+     apt: pkg=postgresql state=present
+     apt: pkg=postgis state=present
+     apt: pkg=libpq-dev state=present

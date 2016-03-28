@@ -1,0 +1,15 @@
+---
+- hosts: savbatv2
+  user: ansible
+  sudo: true
+  vars:
+	  tomcat_version = "7.0.42"
+  tasks:
+    - name: create directories
+      file: path=/usr/local/tomcats state=directory
+    - name: download apache-tomcat tarball
+      command: chdir=/usr/local/tomcats /usr/bin/wget http://mirror.ventraip.net.au/apache/tomcat/tomcat-7/v{{tomcat_version}}/bin/apache-tomcat-{{tomcat_version}}.tar.gz
+    - name: unpack tomcat
+      command: chdir=/usr/local/tomcats tar xvzf apache-tomcat-{{tomcat_version}}.tar.gz
+	- name: fetch Tomcat v7 skeleton
+	- subversion: repo=http://svn.spatialvision.com.au/SVIT/trunk/tomcats7 dest=/usr/local/tomcats/instance_{{ tomcat_instance_name }} -username=ansible -password=rimmer export=True

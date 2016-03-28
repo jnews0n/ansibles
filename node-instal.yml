@@ -1,0 +1,9 @@
+---
+- hosts: CentOS
+  user: ansible
+  sudo: True
+  vars:
+    node_version: 0.10.29
+  tasks:
+    - name: Install node.js
+      nodejs: version={{node_version}}

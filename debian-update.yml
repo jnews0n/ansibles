@@ -1,0 +1,13 @@
+---
+- hosts: debian
+  user: ansible
+  sudo: true
+  tasks:
+   - name: Ensure Latest system updates are installed.
+     apt: update_cache=yes
+   - name: Ensure postgresql and postgis are excluded from upgrade.
+     command: echo postgresql hold | dpkg --set-selections
+     command: echo postgresql-9.3 hold | dpkg --set-selections
+     command: echo postgis hold | dpkg --set-selections
+   - name: Install latest operating system updates.
+     apt: upgrade=dist

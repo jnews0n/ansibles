@@ -1,0 +1,11 @@
+---
+- hosts: savbatv2
+  user: ansible
+  sudo: true
+  vars:
+    PROJECT_HOME: "/var/www/savbat2"
+    ansible_python_interpreter: "/usr/local/python-2.7.6/bin/python"
+
+  tasks:
+  - name: Fetch the savbat2 code
+    subversion: repo=http://svn.spatialvision.com.au/savbat_v2/trunk  username=ansible password=rimmer dest={{ PROJECT_HOME }}/savbat_v2

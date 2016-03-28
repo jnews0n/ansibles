@@ -1,0 +1,8 @@
+---
+- name: install and start apache
+  hosts: CentOS
+  user: ansible
+  sudo: true
+  tasks:
+    - name: install latest updates
+      yum: name=* state=latest

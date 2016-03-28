@@ -1,0 +1,28 @@
+--- 
+- 
+  hosts: savbatv2
+  user: ansible
+  sudo: true
+  tasks: 
+    - apt: update_cache=yes
+    - name: Ensure postgresql and postgis are excluded from upgrade.
+      command: echo postgresql hold | dpkg --set-selections
+    - name: Ensure postgresql and postgis are excluded from upgrade.
+      command: echo postgresql-9.3 hold | dpkg --set-selections
+    - name: Ensure postgis are excluded from upgrade.
+      command: echo postgis hold | dpkg --set-selections
+    - apt: pkg=python-apt state=present
+    - apt: pkg=libcurl4-nss-dev state=present
+    - apt: pkg=gcc state=present
+    - apt: pkg=g++ state=present
+    - apt: pkg=make state=present
+    - apt: pkg=xz-utils state=present
+    - apt: pkg=libcurl4-nss-dev state=present
+    - apt: pkg=libbz2-dev state=present
+    - apt: pkg=subversion state=present
+    - apt: pkg=apache2 state=present
+    - apt: pkg=libapache2-mod-wsgi state=present
+    - apt: pkg=tomcat7 state=present
+    - apt: pkg=python-virtualenv state=present
+    - apt: pkg=libssl-dev state=present
+    - apt: pkg=unzip state=present

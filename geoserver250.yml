@@ -1,0 +1,13 @@
+---
+- hosts: all
+  user: ansible
+  sudo: true
+  tasks:
+    - name: create directories
+      file: path=/usr/local/src state=directory
+    - name: create directories
+      file: path=/usr/local/geoserver-2.5 state=directory
+    - name: download GeoServer tarball
+      command: chdir=/usr/local/src /usr/bin/wget http://sourceforge.net/projects/geoserver/files/GeoServer/2.5/geoserver-2.5-war.zip
+    - name: unpack geoserver
+      command: chdir=/usr/local/geoserver-2.5 unzip /usr/local/src/geoserver-2.5-war.zip

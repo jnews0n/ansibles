@@ -1,0 +1,30 @@
+---
+- hosts: tiles
+  user: ansible
+  sudo: True
+  vars:
+    tilestream_home: "/usr/local/tilestream"
+  tasks:
+    - name: Install GIT
+      yum: name=git state=installed
+    - name: Install NodeJS
+      yum: enablerepo=epel name=nodejs state=installed
+    - name: Install NPM
+      yum: enablerepo=epel name=npm state=installed
+    - name: Install Tilestream dependancy sqlite
+      npm: name=sqlite3 state=present global=yes production=yes
+    - name: Install Tilestream dependancies mbtiles
+      npm: name=mbtiles state=present global=yes production=yes 
+    - name: Clone Tilestream Git repo
+      git: repo=https://github.com/mapbox/tilestream.git dest={{tilestream_home}}
+    - name: Build Tilestream
+      npm: path={{tilestream_home}}
+    - name: Install Forever to run tilestream as Daemon
+      npm: name=forever global=yes state=latest
+    - name: "Check list of Node.js apps running."
+      command: forever list
+      register: forever_list
+      changed_when: false
+    - name: "Start Tilestream Node.js app."
+      command: forever start {{tilestream_home}}/index.js --host mapscape.sv.domain --tiles=/opt/tilestream-test
+      when: "forever_list.stdout.find('{{tilestream_home}}/index.js') == -1"

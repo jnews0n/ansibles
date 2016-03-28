@@ -1,0 +1,27 @@
+---
+- hosts: savbatv2
+  user: ansible
+  sudo: true
+  vars:
+    PROJECT_HOME: "/var/www/savbat2"
+    ansible_python_interpreter: "/usr/local/python-2.7.6/bin/python"
+    misc_home: "/var/www/savbat2/savbat_v2/misc/software"
+    env: 
+      CFLAGS: "-fPIC"
+  
+  tasks:
+    - name: Unpack GDAL
+      command: chdir=/usr/local/src tar xvzf {{ misc_home }}/gdal-1.10.1.tar.gz
+    - name: Configure GDAL
+      command: chdir=/usr/local/src/gdal-1.10.1 /usr/local/src/gdal-1.10.1/configure --with-python=/usr/local/python-2.7.6/bin/python --prefix=/usr/local/gdal-1.10.1
+      environment: env
+    - name: Build GDAL
+      command: chdir=/usr/local/src/gdal-1.10.1 /usr/bin/make
+  
+    - name: Unpack PROJ
+      command: chdir=/usr/local/src tar xvzf {{ misc_home }}/proj-4.8.0.tar.gz
+    - name: Configure PROJ
+      command: chdir=/usr/local/src/proj-4.8.0 /usr/local/src/proj-4.8.0/configure --with-python=/usr/local/python-2.7.6/bin/python --prefix=/usr/local/gdal-1.10.1
+      environment: env
+    - name: Build PROJ
+      command: chdir=/usr/local/src/proj-4.8.0 /usr/bin/make

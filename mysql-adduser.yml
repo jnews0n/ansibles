@@ -1,0 +1,14 @@
+- hosts: mysql
+  user: ansible
+  sudo: yes
+  tasks:
+      - name: Add anonymous MySQL server user for localhost
+	  mysql_user: user=svuser password=rimmer state=present
+      - name: Add MySQL server user for localhost
+	  mysql_user: name=svuser host={{ item }} password=rimmer
+	  with_items:
+		  - $ansible_hostname
+		  - 127.0.0.1
+		  - ::1
+		  - localhost
+		  - %

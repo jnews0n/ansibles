@@ -1,0 +1,7 @@
+---
+- hosts: 9fold
+  user: ansible
+  sudo: true
+  tasks:
+   - name: Ensure Latest system updates are installed.
+     yum: name=openssl state=latest

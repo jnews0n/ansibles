@@ -1,0 +1,24 @@
+---
+# Build virtualenv
+- hosts: ansible3
+  vars:
+      project_home: "/usr/local/savbat"
+      ansible_python_interpreter: "/usr/local/python-2.7.6/bin/python"
+  tasks:
+  - name: Create virtualenv
+    shell: virtualenv "{{ project_home }}/venv"
+           creates="{{ project_home }}/venv/bin/activate"
+  - name: "Copy virtualenv wrapper file"
+    synchronize: src=pyvenv
+                 dest="{{ project_home }}/venv/bin/pyvenv"
+
+# Use virtualenv
+- hosts: ansible3
+vars:
+  project_home: "/usr/local/savbat"
+  ansible_python_interpreter: "/usr/local/savbat/bin/python/pyvenv"
+tasks:
+  - name: "Guard code, so we are more certain we are in a virtualenv"
+    shell: echo $VIRTUAL_ENV
+    register: command_result
+    failed_when: command_result.stdout == ""

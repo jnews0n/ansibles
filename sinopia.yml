@@ -1,0 +1,19 @@
+---
+- hosts: svci.sv.domain
+  user: ansible
+  sudo: True
+  tasks:
+    - name: Install gcc
+      yum: name=gcc state=installed
+    - name: Install glibc
+      yum: name=glibc state=installed
+    - name: Install make
+      yum: name=make state=installed
+    - name: Install NodeJS
+      yum: enablerepo=epel name=nodejs state=installed
+    - name: Install NPM
+      yum: enablerepo=epel name=npm state=installed
+    - name: Install Sinopia
+      npm: name=sinopia global=yes state=latest
+    - name: Install Forever to run tilestream as Daemon
+      npm: name=forever global=yes state=present

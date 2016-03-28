@@ -1,0 +1,11 @@
+---
+- hosts: savbat2.spatialvision.com.au
+  user: ansible
+  sudo: true
+  vars:
+    PROJECT_HOME: "/var/www/savbat2"
+    ansible_python_interpreter: "/var/www/savbat2/bin/python"
+
+  tasks:
+   - name: Install Python Module
+     pip: requirements="{{PROJECT_HOME}}/savbat_v2/misc/software/requirements.txt" virtualenv={{ PROJECT_HOME }}

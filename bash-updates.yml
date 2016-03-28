@@ -1,0 +1,12 @@
+---
+- name: Upgrade bash
+  hosts: CentOS
+  user: ansible
+  sudo: true
+  tasks:
+    - name: install latest updates
+      yum: name=bash state=latest
+    - name: install bash update
+      yum: name=bash state=latest
+    - name: install openssl update
+      yum: name=openssl state=latest

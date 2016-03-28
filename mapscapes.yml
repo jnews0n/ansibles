@@ -1,0 +1,14 @@
+---
+- hosts: mapscape-test
+  user: ansible
+  sudo: True
+  tasks:
+   - name: Ensure Git is installed.
+     yum: name=git state=latest
+   - name: Ensure Curl is installed.
+     yum: name=curl state=latest
+   - name: Ensure wget is installed.
+     yum: name=wget state=latest
+   - name: install and start ntp
+     yum: name=ntp state=latest
+   - service: name=ntpd state=running enabled=yes

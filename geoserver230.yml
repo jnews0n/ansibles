@@ -1,0 +1,15 @@
+---
+- hosts: all
+  user: ansible
+  sudo: true
+  tasks:
+    - name: make sure we can unzip
+      apt: pkg=unzip state=present  
+    - name: create directories
+      file: path=/var/geoserver-2.3.0 state=directory
+    - name: create directories
+      file: path=/usr/local/geoserver-2.3.0 state=directory
+    - name: download GeoServer tarball
+      command: chdir=/usr/local/geoserver-2.3.0 /usr/bin/wget http://sourceforge.net/projects/geoserver/files/GeoServer/2.3.0/geoserver-2.3.0-war.zip
+    - name: unpack geoserver
+      command: chdir=/var/geoserver-2.3.0 /usr/bin/unzip /usr/local/geoserver-2.3.0/geoserver-2.3.0-war.zip

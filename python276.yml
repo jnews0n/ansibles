@@ -1,0 +1,25 @@
+---
+- hosts: centos5
+  user: ansible
+  sudo: true
+  vars:
+    env: 
+      CFLAGS: "-fPIC"
+  
+  tasks:
+    - name: create directories
+      file: path=/usr/local/python state=directory
+    - name: create directories
+      file: path=/usr/local/python-2.7.6 state=directory
+    - name: download python tarball
+      command: chdir=/usr/local/python /usr/bin/wget --unlink https://www.python.org/ftp/python/2.7.6/Python-2.7.6.tar.xz
+    - name: unpack python
+      command: chdir=/usr/local/python tar xvJf Python-2.7.6.tar.xz 
+    - name: configure python
+      command: chdir=/usr/local/python/Python-2.7.6 /usr/local/python/Python-2.7.6/configure --prefix=/usr/local/python-2.7.6
+      environment: env
+  
+    - name: build python
+      command: chdir=/usr/local/python/Python-2.7.6 /usr/bin/make
+    - name: install python
+      command: chdir=/usr/local/python/Python-2.7.6 /usr/bin/make install

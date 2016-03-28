@@ -1,0 +1,29 @@
+---
+- hosts: centos7
+  user: ansible
+  sudo: True
+  tasks:
+    - name: Install gcc
+      yum: name=gcc state=installed
+    - name: Install httpd
+      yum: name=httpd state=latest
+    - name: Install glibc
+      yum: name=glibc state=installed
+    - name: Install make
+      yum: name=make state=installed
+    - name: Install GIT
+      yum: name=git state=installed
+    - name: Install Curl
+      yum: name=curl state=installed
+    - name: Install NodeJS
+      yum: enablerepo=epel name=nodejs state=installed
+    - name: Clone Tilestream Git repo
+      git: repo=https://github.com/mapbox/tilestream.git dest=/usr/local/tilestream
+    - name: Install Bones
+      npm: name=bones path=/usr/local/tilestream
+    - name: Install Leaflet
+      npm: name=leaflet path=/usr/local/tilestream
+    - name: Build Tilestream
+      npm: path=/usr/local/tilestream
+    - name: Install Forever to run tilestream as Daemon
+      npm: name=forever global=yes state=latest

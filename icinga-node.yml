@@ -1,0 +1,26 @@
+---
+- hosts: CentOS
+  user: ansible
+  sudo: yes
+  tasks:
+          
+  - name: Install Icinga local monitoring client
+    when: ansible_distribution == 'CentOS'
+    yum: state=present enablerepo=epel name={{ item }}
+    with_items:
+    - nrpe
+    - nagios-plugins
+    - nagios-plugins-all
+    - policycoreutils-python
+
+  - name: Deploy configuration files
+    copy: src=templates/nagios/nrpe.cfg dest=/etc/nagios/nrpe.cfg force=yes
+    copy: src=templates/nagios/sv.cfg dest=/etc/nagios/sv.cfg force=yes
+
+  - name: update file to reflect node settings
+    lineinfile: dest=/etc/nagios/nrpe.cfg regexp='^server_address' line=server_address={{ ansible_eth1['ipv4']['address'] }} state=present
+    lineinfile: dest=/etc/nagios/nrpe.cfg regexp='^allowed_hosts' line='allowed_hosts=127.0.0.1,172.18.11.2' state=present
+    lineinfile: dest=/etc/nagios/nrpe.cfg regexp='^include' line=include=/etc/nagios/sv.cfg state=present
+
+  - name: reload nrpe
+    service: enabled=yes state=restarted name=nrpe

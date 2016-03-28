@@ -1,0 +1,12 @@
+---
+- hosts: savbatv2
+  user: ansible
+  sudo: true
+  vars:
+    PROJECT_HOME: "/var/www/qa-savbat-v2"
+    ansible_python_interpreter: "/usr/local/python-2.7.6/bin/python"
+  tasks:
+    - name: create savbat directory
+      file: path="{{ PROJECT_HOME }}" state=directory
+    - name: create python virtual environment
+      command: chdir=/var/www /usr/bin/virtualenv -p {{ ansible_python_interpreter }} --no-site-packages --prompt='QA-SAVBAT-v2 ' {{ PROJECT_HOME }}

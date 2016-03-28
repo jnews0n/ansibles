@@ -1,0 +1,19 @@
+---
+- hosts: CentOS
+  user: ansible
+  sudo: yes
+  tasks:
+          
+  - name: get epel-repo rpm RHEL6
+    get_url: url=http://epel.syd.au.glomirror.com.au/6/i386/epel-release-6-8.noarch.rpm dest=/tmp/epel.repo.rpm
+    when: ansible_distribution == 'CentOS' and ansible_distribution_version >= '6'
+  
+  - name: get epel-repo rpm RHEL7
+    get_url: url='http://dl.fedoraproject.org/pub/epel/beta/7/x86_64/epel-release-7-0.2.noarch.rpm' dest=/tmp/epel.repo.rpm
+    when: ansible_distribution == 'CentOS' and ansible_distribution_version >= '7.0'
+
+  - name: install epel
+    yum: name=/tmp/epel.repo.rpm state=present
+
+  - shell: echo "only on Red Hat 6, derivatives, and later"
+    when: ansible_distribution == 'CentOS'

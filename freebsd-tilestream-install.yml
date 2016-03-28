@@ -1,0 +1,37 @@
+---
+- hosts: freebsd
+  user: ansible
+  sudo: True
+  vars:
+      ansible_python_interpreter: "/usr/bin/env /usr/local/bin/python"
+  tasks:
+    - name: Install gcc
+      pkgng: name=gcc state=present
+    - name: Install httpd
+      pkgng: name=apache24 state=present
+    - name: Install make
+      pkgng: name=gmake-lite state=present
+    - name: Install GIT
+      pkgng: name=git state=present
+    - name: Install Curl
+      pkgng: name=curl state=present
+    - name: Fetch NodeJS
+      get_url: dest=/usr/local/src url=http://nodejs.org/dist/v0.10.29/node-v0.10.29.tar.gz
+    - name: Extract NodeJS
+      command: chdir=/usr/local/src /usr/bin/tar xvzf node-v0.10.29.tar.gz
+    - name: Configure NodeJS source
+      command: chdir=/usr/local/src/node-v0.10.29  ./configure --prefix=/usr/local/node
+    - name: Build NodeJS
+      command: chdir=/usr/local/src/node-v0.10.29 /usr/local/bin/gmake
+    - name: Build NodeJS
+      command: chdir=/usr/local/src/node-v0.10.29 '/usr/local/bin/gmake install'
+    - name: Clone Tilestream Git repo
+      git: repo=https://github.com/mapbox/tilestream.git dest=/usr/local/tilestream
+    - name: Install Bones
+      npm: name=bones path=/usr/local/tilestream
+    - name: Install Leaflet
+      npm: name=leaflet path=/usr/local/tilestream
+    - name: Build Tilestream
+      npm: path=/usr/local/tilestream
+    - name: Install Forever to run tilestream as Daemon
+      npm: name=forever global=yes state=latest

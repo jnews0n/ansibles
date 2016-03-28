@@ -1,0 +1,13 @@
+---
+- hosts: savbatv2
+  user: ansible
+  sudo: true
+  vars:
+    PROJECT_HOME: "/var/www/savbat-v2"
+    ansible_python_interpreter: "/usr/local/python-2.7.6/bin/python"
+
+  tasks:
+   - name: We need python-dev to install pycopg2
+     apt: pkg=python-dev state=present
+   - name: Install Python Module
+     pip: requirements="{{PROJECT_HOME}}/savbat_v2/misc/software/requirements.txt" virtualenv={{ PROJECT_HOME }}

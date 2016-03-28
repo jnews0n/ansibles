@@ -1,0 +1,35 @@
+---
+- hosts: CentOS
+  user: ansible
+  sudo: yes
+  tasks:
+  
+  - name: get epel-repo rpm RHEL6
+    yum: state=present name={{ item }}
+    with_items:
+    - rpm-build 
+    - rpmdevtools 
+    - openssl-devel 
+    - zlib-devel 
+    - redhat-rpm-config 
+    - gcc 
+    - gcc-c++ 
+    - make 
+    - libstdc++-devel
+    - wget
+
+  - name: prepare rpmbuild
+    command: /usr/bin/rpmdev-setuptree
+    sudo: no
+
+  - name: fetch nodejs-rpm
+    git: repo=https://github.com/kazuhisya/nodejs-rpm.git dest=/usr/local/src/nodejs-rpm
+
+  - name: build nodejs stage
+    command: chdir=/usr/local/src/nodejs-rpm './build.sh'
+    sudo: no
+
+  - name: install rpm packages
+    yum: disable_gpg_check=yes  name=/home/ansible/rpmbuild/RPMS/x86_64/nodejs-0.10.29-2.el7.centos.x86_64.rpm state=present
+    yum: disable_gpg_check=yes  name=/home/ansible/rpmbuild/RPMS/x86_64/nodejs-npm-0.10.29-2.el7.centos.x86_64.rpm state=present
+
