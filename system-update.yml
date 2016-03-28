@@ -1,6 +1,7 @@
 ---
-- hosts: all
-  user: root
+- hosts: CentOS
+  user: ansible
+  sudo: true
   tasks:
    - name: Ensure Latest system updates are installed.
      yum: name=* state=latest
